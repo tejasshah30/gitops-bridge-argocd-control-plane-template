@@ -1,31 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: opencost
+  name: cilium
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: https://opencost.github.io/opencost-helm-chart
-    chart: opencost
-    targetRevision: 1.26.3
+    repoURL: https://helm.cilium.io/
+    path: .
+    targetRevision: 1.14.3
     helm:
-      releaseName: opencost
+      releaseName: cilium
       valueFiles:
         - "values.yaml"
-        
-      values: |-
-        opencost:
-          prometheus:
-            internal:
-              serviceName: monitoring-kube-prometheus-prometheus
-              namespaceName: monitoring
+        - "chain-aws-cni.yaml"
         
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: opencost
+    namespace: cilium
   syncPolicy:
     automated:
       prune: true
