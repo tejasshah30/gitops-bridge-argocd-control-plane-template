@@ -8,9 +8,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://cm.infra.he2pi.com/GitOpsGreenfield/addons/cilium.git
+    repoURL: https://helm.cilium.io/
     path: .
-    targetRevision: HEAD
+    targetRevision: 1.14.3
     helm:
       releaseName: cilium
       valueFiles:
