@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://cm.infra.he2pi.com/GitOpsGreenfield/addons/cilium.git
+    path: .
+    targetRevision: HEAD
+    helm:
+      releaseName: cilium
+      valueFiles:
+        - "values.yaml"
+        - "chain-aws-cni.yaml"
+        
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: cilium
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true # TODO: option for this. this fixes large CRD applies (avoid alst applied annotation)
